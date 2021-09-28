@@ -34,7 +34,7 @@ var interactiveMap = {
     this.map.addControl(new mapboxgl.NavigationControl());
     controller.initializeListeners();
   },
-  addCountryFilter: function(region) {
+  addCountryFilter: function(region, color) {
     let countries;
 
     if (region !== '') {
@@ -45,9 +45,10 @@ var interactiveMap = {
           ...countries
         ]);
     } else {
-      countries = [];
       this.map.setFilter('country-boundaries', null);
     }
+
+    view.highlightRegion(color);
   },
   getCountryCodes: function(region) {
     return Object.values(region);
@@ -65,15 +66,18 @@ var controller = {
 
         if (features[0]) {
             var region = features[0].properties.region;
+            console.log(region);
             switch (region) {
               case 'Africa':
-                view.highlightRegion(Africa, '#284476');
+                interactiveMap.addCountryFilter(region, '#284476');
                 break;
-              default:
+              case 'Oceana':
+
+                break;
 
             }
         } else {
-          view.highlightRegion('', '#FFFFFF');
+          interactiveMap.addCountryFilter('', '#FFFFFF');
         }
       })
   }
@@ -97,11 +101,10 @@ var view = {
       }
     );
 
-    interactiveMap.addCountryFilter('');
+    interactiveMap.addCountryFilter('', '#FFFFFF');
   },
-  highlightRegion(region, color) {
+  highlightRegion(color) {
     interactiveMap.map.setPaintProperty('country-boundaries', 'fill-color', color);
-    interactiveMap.addCountryFilter(region);
   }
 };
 
