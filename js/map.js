@@ -1,64 +1,7 @@
-// DoS region dictionaries
-var Africa = {
-  'Angola': 'AGO',
-  'Benin': 'BEN',
-  'Botswana': 'BWA',
-  'Burkina Faso': 'BFA',
-  'Burundi': 'BDI',
-  'Cabo Verde': 'CPV',
-  'Cameroon': 'CMR',
-  'Central African Republic': 'CAF',
-  'Chad': 'TCD',
-  'Comoros': 'COM',
-  'Côte d’Ivoire': 'CIV',
-  'Democratic Republic of the Congo': 'COD',
-  'Djibouti': 'DJI',
-  'Equatorial Guinea': 'GNQ',
-  'Eritrea': 'ERI',
-  'Eswatini': 'SWZ',
-  'Ethiopia': 'ETH',
-  'Gabon': 'GAB',
-  'Gambia': 'GMB',
-  'Ghana': 'GHA',
-  'Guinea': 'GIN',
-  'Guinea-Bissau': 'GNB',
-  'Kenya': 'KEN',
-  'Lesotho': 'LSO',
-  'Liberia': 'LBR',
-  'Madagascar': 'MDG',
-  'Malawi': 'MWI',
-  'Mali': 'MLI',
-  'Mauritania': 'MRT',
-  'Mauritius': 'MUS',
-  'Mozambique': 'MOZ',
-  'Namibia': 'NAM',
-  'Niger': 'NER',
-  'Nigeria': 'NGA',
-  'Republic of the Congo': 'COG',
-  'Rwanda': 'RWA',
-  'São Tomé and Príncipe': 'STP',
-  'Senegal': 'SEN',
-  'Seychelles': 'SYC',
-  'Sierra Leone': 'SLE',
-  'Somalia': 'SOM',
-  'South Africa': 'ZAF',
-  'South Sudan': 'SSD',
-  'Sudan': 'SDN',
-  'Tanzania': 'TZA',
-  'Togo': 'TGO',
-  'Uganda': 'UGA',
-  'Zambia': 'ZMB',
-  'Zimbabwe': 'ZWE'
-};
-var EastAsiaAndPacific = {};
-var EuropeAndEurasia = {};
-var NearEast = {};
-var SouthAndCentralAsia = {};
-var WesternHemisphere = {};
-
 var interactiveMap = {
   token: null,
   map: null,
+  highlightedRegion: '',
   getToken: function() {
     var scope = this;
     fetch('/api/getToken.js', {
@@ -85,14 +28,60 @@ var interactiveMap = {
       container: 'map', // container ID
       style: 'mapbox://styles/thaddeusmccleary/cku2oy4o30czo17s1twoies5a', // style URL
       center: [5, 36], // starting position [lng, lat]
-      zoom: 0 // starting zoom
+      zoom: 1 // starting zoom
     });
 
     this.map.addControl(new mapboxgl.NavigationControl());
     controller.initializeListeners();
   },
+  addCountryFilter: function(region) {
+    let countries;
+
+    if (region !== '') {
+        countries = this.getCountryCodes(region);
+        this.map.setFilter('country-boundaries', [
+          "in",
+          "iso_3166_1_alpha_3",
+          ...countries
+        ]);
+    } else {
+      countries = [];
+      this.map.setFilter('country-boundaries', null);
+    }
+  },
+  getCountryCodes: function(region) {
+    return Object.values(region);
+  }
+};
+
+var controller = {
+  initializeListeners: function() {
+      interactiveMap.map.on("style.load", function() {
+        view.addCountryLayer();
+      });
+
+      interactiveMap.map.on("mousemove", function(e) {
+        var features = interactiveMap.map.queryRenderedFeatures(e.point, { layers: ["country-boundaries"] });
+
+        if (features[0]) {
+            var region = features[0].properties.region;
+            switch (region) {
+              case 'Africa':
+                view.highlightRegion(Africa, '#284476');
+                break;
+              default:
+
+            }
+        } else {
+          view.highlightRegion('', '#FFFFFF');
+        }
+      })
+  }
+};
+
+var view = {
   addCountryLayer: function() {
-    this.map.addLayer(
+    interactiveMap.map.addLayer(
     {
         id: 'country-boundaries',
         source: {
@@ -102,36 +91,18 @@ var interactiveMap = {
         'source-layer': 'country_boundaries',
         type: 'fill',
         paint: {
-          'fill-color': '#284476',
+          'fill-color': '#FFFFFF',
           'fill-opacity': 1,
         },
       }
     );
 
-    this.addCountryFilter();
+    interactiveMap.addCountryFilter('');
   },
-  addCountryFilter: function() {
-    let countries = this.getCountryCodes(Africa);
-
-    this.map.setFilter('country-boundaries', [
-      "in",
-      "iso_3166_1_alpha_3",
-      ...countries
-    ]);
-  },
-  getCountryCodes: function(region) {
-    return Object.values(region);
+  highlightRegion(region, color) {
+    interactiveMap.map.setPaintProperty('country-boundaries', 'fill-color', color);
+    interactiveMap.addCountryFilter(region);
   }
-}
-
-var controller = {
-  initializeListeners: function() {
-      interactiveMap.map.on("load", function() {
-        setTimeout(function() {
-          interactiveMap.addCountryLayer();
-        }, 1000)
-      });
-  }
-}
+};
 
 interactiveMap.getToken();
