@@ -1,7 +1,7 @@
 var interactiveMap = {
   token: null,
   map: null,
-  highlightedRegion: '',
+  popup: null,
   getToken: function() {
     var scope = this;
     fetch('/api/getToken.js', {
@@ -25,86 +25,118 @@ var interactiveMap = {
   initializeMap: function() {
     mapboxgl.accessToken = this.token;
     this.map = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/thaddeusmccleary/cku2oy4o30czo17s1twoies5a', // style URL
-      center: [5, 36], // starting position [lng, lat]
-      zoom: 1 // starting zoom
+      container: 'map',
+      style: 'mapbox://styles/thaddeusmccleary/cku2oy4o30czo17s1twoies5a',
+      center: [5, 36],
+      zoom: 1
     });
 
     this.map.addControl(new mapboxgl.NavigationControl());
     controller.initializeListeners();
   },
   addCountryFilter: function(region, color) {
-    let countries;
-
     if (region !== '') {
-        countries = this.getCountryCodes(region);
         this.map.setFilter('country-boundaries', [
           "in",
           "iso_3166_1_alpha_3",
-          ...countries
+          ...region
         ]);
     } else {
       this.map.setFilter('country-boundaries', null);
     }
-
+    
     view.highlightRegion(color);
-  },
-  getCountryCodes: function(region) {
-    return Object.values(region);
   }
 };
 
 var controller = {
   initializeListeners: function() {
-      interactiveMap.map.on("style.load", function() {
-        view.addCountryLayer();
-      });
-
-      interactiveMap.map.on("mousemove", function(e) {
+      interactiveMap.map.on("click", "country-boundaries", function(e) {
         var features = interactiveMap.map.queryRenderedFeatures(e.point, { layers: ["country-boundaries"] });
 
-        if (features[0]) {
-            var region = features[0].properties.region;
-            console.log(region);
-            switch (region) {
-              case 'Africa':
-                interactiveMap.addCountryFilter(region, '#284476');
-                break;
-              case 'Oceana':
+        if (features[0] && !interactiveMap.popup) {
+          var countryISO = features[0].properties.iso_3166_1_alpha_3;
+          var country = features[0].properties.name_en;
+          var region = ISOs[countryISO];
 
-                break;
+          var countryList = null;
 
-            }
-        } else {
-          interactiveMap.addCountryFilter('', '#FFFFFF');
+          switch (region) {
+            case 'Africa':
+              interactiveMap.highlightedRegion = 'Africa';
+              interactiveMap.addCountryFilter(AfricaISOs, '#284476');
+              countryList = Object.keys(Africa);
+              break;
+            case 'East Asia and Pacific':
+              interactiveMap.highlightedRegion = 'East Asia and Pacific';
+              interactiveMap.addCountryFilter(EastAsiaAndPacificISOs, '#4DA6CD');
+              countryList = Object.keys(EastAsiaAndPacific);
+              break;
+            case 'Europe and Eurasia':
+              interactiveMap.highlightedRegion = 'Europe and Eurasia';
+              interactiveMap.addCountryFilter(EuropeAndEurasiaISOs, '#7E2320');
+              countryList = Object.keys(EuropeAndEurasia);
+              break;
+            case 'Near East':
+              interactiveMap.highlightedRegion = 'Near East';
+              interactiveMap.addCountryFilter(NearEastISOs, '#D16938');
+              countryList = Object.keys(NearEast);
+              break;
+            case 'South and Central Asia':
+              interactiveMap.highlightedRegion = 'South and Central Asia';
+              interactiveMap.addCountryFilter(SouthAndCentralAsiaISOs, '#EAC446');
+              countryList = Object.keys(SouthAndCentralAsia);
+              break;
+            case 'Western Hemisphere':
+              interactiveMap.highlightedRegion = 'Western Hemisphere';
+              interactiveMap.addCountryFilter(WesternHemisphereISOs, '#3E8549');
+              countryList = Object.keys(WesternHemisphere);
+              break;
+          }
+
+          if (countryList) {
+            var htmlContent = view.createPopupContent(region, countryList);
+
+            interactiveMap.popup = new mapboxgl.Popup({closeOnClick: false})
+              .setLngLat(e.lngLat.wrap())
+              .setHTML(htmlContent.outerHTML)
+              .addTo(interactiveMap.map);
+
+            interactiveMap.popup.on("close", function(e) {
+              controller.resetMap();
+              interactiveMap.popup = null;
+            });
+          }
+
         }
-      })
+      });
+  },
+  resetMap: function() {
+    interactiveMap.highlightedRegion = '';
+    interactiveMap.addCountryFilter('', '#FFFFFF');
   }
 };
 
 var view = {
-  addCountryLayer: function() {
-    interactiveMap.map.addLayer(
-    {
-        id: 'country-boundaries',
-        source: {
-          type: 'vector',
-          url: 'mapbox://mapbox.country-boundaries-v1',
-        },
-        'source-layer': 'country_boundaries',
-        type: 'fill',
-        paint: {
-          'fill-color': '#FFFFFF',
-          'fill-opacity': 1,
-        },
-      }
-    );
-
-    interactiveMap.addCountryFilter('', '#FFFFFF');
-  },
-  highlightRegion(color) {
+  highlightRegion: function(color) {
     interactiveMap.map.setPaintProperty('country-boundaries', 'fill-color', color);
+  },
+  createPopupContent: function(region, countryList) {
+    var container = document.createElement('div');
+    container.classList.add('popup-container');
+    var h1 = document.createElement('h1');
+    h1.innerHTML = region;
+    container.appendChild(h1);
+    var ul = document.createElement('ul');
+
+    for (var i=0; i<countryList.length; i++) {
+      var li = document.createElement('li');
+      li.innerHTML = countryList[i];
+      ul.appendChild(li);
+    }
+
+    container.appendChild(ul);
+    return container;
   }
 };
 
