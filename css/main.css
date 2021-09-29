@@ -55,14 +55,13 @@ footer {
 }
 
 .popup-container {
-  padding-top: 1rem;
+  padding-top: .5rem;
 }
 
 .popup-container ul {
-  max-height: 200px;
+  max-height: 150px;
   margin-top: .5rem;
   overflow: scroll;
-  padding-bottom: .5rem;
 }
 
 .mapboxgl-popup-content {
@@ -80,4 +79,5 @@ footer {
 
 .mapboxgl-popup-close-button {
   font-size: 20px;
+  outline: none;
 }
