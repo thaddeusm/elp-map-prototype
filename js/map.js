@@ -159,9 +159,9 @@ var view = {
     container.appendChild(anchor);
 
     var ul = document.createElement('ul');
-
+    
     var li = document.createElement('li');
-    li.innerHTML = '<strong>Countries with Projects:</strong>';
+    li.innerHTML = '<strong>Countries with projects:</strong>';
     ul.appendChild(li);
 
     for (var i=0; i<countryList.length; i++) {
