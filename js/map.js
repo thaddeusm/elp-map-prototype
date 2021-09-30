@@ -31,7 +31,7 @@ var interactiveMap = {
     this.map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/thaddeusmccleary/cku2oy4o30czo17s1twoies5a',
-      center: [5, 36],
+      center: [5, 17],
       zoom: 1
     });
 
@@ -159,7 +159,7 @@ var view = {
     container.appendChild(anchor);
 
     var ul = document.createElement('ul');
-    
+
     var li = document.createElement('li');
     li.innerHTML = '<strong>Countries with projects:</strong>';
     ul.appendChild(li);
