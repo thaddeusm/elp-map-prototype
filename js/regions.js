@@ -103,6 +103,7 @@ var EuropeAndEurasia = {
   "Georgia": "GEO",
   "Germany": "DEU",
   "Greece": "GRC",
+  "Greenland": "GRL",
   "Holy See": "VAT",
   "Hungary": "HUN",
   "Iceland": "ISL",
@@ -309,6 +310,7 @@ var Countries = {
   "Georgia": "Europe and Eurasia",
   "Germany": "Europe and Eurasia",
   "Greece": "Europe and Eurasia",
+  "Greenland": "Europe and Eurasia",
   "Holy See": "Europe and Eurasia",
   "Hungary": "Europe and Eurasia",
   "Iceland": "Europe and Eurasia",
@@ -509,6 +511,7 @@ var ISOs = {
   "GEO": "Europe and Eurasia",
   "DEU": "Europe and Eurasia",
   "GRC": "Europe and Eurasia",
+  "GRL": "Europe and Eurasia",
   "VAT": "Europe and Eurasia",
   "HUN": "Europe and Eurasia",
   "ISL": "Europe and Eurasia",
@@ -611,7 +614,7 @@ var ISOs = {
 // region iso 3 arrays
 var AfricaISOs = ["AGO", "BEN", "BWA", "BFA", "BDI", "CPV", "CMR", "CAF", "TCD", "COM", "CIV", "COD", "DJI", "GNQ", "ERI", "SWZ", "ETH", "GAB", "GMB", "GHA", "GIN", "GNB", "KEN", "LSO", "LBR", "MDG", "MWI", "MLI", "MRT", "MUS", "MOZ", "NAM", "NER", "NGA", "COG", "RWA", "STP", "SEN", "SYC", "SLE", "SOM", "ZAF", "SSD", "SDN", "TZA", "TGO", "UGA", "ZMB", "ZWE"];
 var EastAsiaAndPacificISOs = ["AUS", "BRN", "MMR", "KHM", "CHN", "FJI", "IDN", "JPN", "KIR", "LAO", "MYS", "MHL", "FSM", "MNG", "NRU", "NZL", "PRK", "PLW", "PNG", "PHL", "WSM", "SGP", "SLB", "KOR", "TWN", "THA", "TLS", "TON", "TUV", "VUT", "VNM"];
-var EuropeAndEurasiaISOs = ["ALB", "AND", "ARM", "AUT", "AZE", "BLR", "BEL", "BIH", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA", "GEO", "DEU", "GRC", "VAT", "HUN", "ISL", "IRL", "ITA", "RKS", "LVA", "LIE", "LTU", "LUX", "MLT", "MDA", "MCO", "MNE", "NLD", "MKD", "NOR", "POL", "PRT", "ROU", "RUS", "SMR", "SRB", "SVK", "SVN", "ESP", "SWE", "CHE", "TUR", "UKR", "GBR"];
+var EuropeAndEurasiaISOs = ["ALB", "AND", "ARM", "AUT", "AZE", "BLR", "BEL", "BIH", "BGR", "HRV", "CYP", "CZE", "DNK", "EST", "FIN", "FRA", "GEO", "GRL", "DEU", "GRC", "VAT", "HUN", "ISL", "IRL", "ITA", "RKS", "LVA", "LIE", "LTU", "LUX", "MLT", "MDA", "MCO", "MNE", "NLD", "MKD", "NOR", "POL", "PRT", "ROU", "RUS", "SMR", "SRB", "SVK", "SVN", "ESP", "SWE", "CHE", "TUR", "UKR", "GBR"];
 var NearEastISOs = ["DZA", "BHR", "EGY", "IRN", "IRQ", "ISR", "JOR", "KWT", "LBN", "LBY", "MAR", "OMN", "PSE", "QAT", "SAU", "SYR", "TUN", "ARE", "YEM"];
 var SouthAndCentralAsiaISOs = ["AFG", "BGD", "BTN", "IND", "KAZ", "KGZ", "MDV", "NPL", "PAK", "LKA", "TJK", "TKM", "UZB"];
 var WesternHemisphereISOs = [ "ATG", "ARG", "BHS", "BRB", "BLZ", "BOL", "BRA", "CAN", "CHL", "COL", "CRI", "CUB", "DMA", "DOM", "ECU", "SLV", "GRD", "GTM", "GUY", "HTI", "HND", "JAM", "MEX", "NIC", "PAN", "PRY", "PER", "KNA", "LCA", "VCT", "SUR", "TTO", "URY", "VEN"];
