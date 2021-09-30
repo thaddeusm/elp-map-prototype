@@ -75,7 +75,7 @@ a {
     "regionTitle ."
     "storiesLink storiesLink"
     "countryList countryList";
-  padding: 10px 0px 0 10px;
+  padding: 10px 10px 0 10px;
 }
 
 .popup-container h1 {
@@ -94,6 +94,11 @@ a {
 .popup-container ul {
   max-height: 150px;
   overflow: scroll;
+  margin-right: -10px;
+}
+
+.popup-container ul li:first-child {
+  margin-right: 15px;
 }
 
 .mapboxgl-popup-content {
@@ -110,4 +115,5 @@ a {
   font-size: 20px;
   outline: none;
   margin-right: 5px;
+  color: black;
 }
