@@ -2,6 +2,12 @@ var interactiveMap = {
   token: null,
   map: null,
   popup: null,
+  popupOptions: {
+    closeOnClick: true,
+    anchor: 'left',
+    offset: 80,
+    maxWidth: '180'
+  },
   getToken: function() {
     var scope = this;
     fetch('/api/getToken.js', {
@@ -67,9 +73,25 @@ var controller = {
     var mq = window.matchMedia( "(min-width: 599px)" );
 
     if (mq.matches){
-        interactiveMap.map.setZoom(1); //set map zoom level for desktop and tablet sizes
+        interactiveMap.map.setZoom(1); // set map zoom level for desktop and tablet sizes
+
+        // set popup options for desktop and tablet sizes
+        interactiveMap.popupOptions = {
+          closeOnClick: true,
+          anchor: 'left',
+          offset: 80,
+          maxWidth: '180'
+        };
     } else {
-        interactiveMap.map.setZoom(0); //set map zoom level for mobile size
+        interactiveMap.map.setZoom(0); //set map zoom level for mobile sizes
+
+        // set popup options for mobile sizes
+        interactiveMap.popupOptions = {
+          closeOnClick: true,
+          anchor: 'bottom',
+          offset: 0,
+          maxWidth: '180'
+        };
     };
   },
   handleMapClick: function(e) {
@@ -127,7 +149,7 @@ var controller = {
       if (countryList) {
         var htmlContent = view.createPopupContent(region, countryList, storiesURL);
 
-        interactiveMap.popup = new mapboxgl.Popup({closeOnClick: false})
+        interactiveMap.popup = new mapboxgl.Popup(interactiveMap.popupOptions)
           .setLngLat(e.lngLat.wrap())
           .setHTML(htmlContent.outerHTML)
           .addTo(interactiveMap.map);
