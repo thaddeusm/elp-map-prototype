@@ -41,8 +41,8 @@ footer {
 
 @media screen and (min-width: 900px) {
   #map {
-    width: 850px;
-    height: 500px;
+    width: 825px;
+    height: 450px;
   }
 }
 
