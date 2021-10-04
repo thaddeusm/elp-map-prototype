@@ -88,8 +88,6 @@ var controller = {
         // set popup options for mobile sizes
         interactiveMap.popupOptions = {
           closeOnClick: true,
-          anchor: 'bottom',
-          offset: 0,
           maxWidth: '180'
         };
     };
