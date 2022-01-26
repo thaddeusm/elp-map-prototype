@@ -9,14 +9,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/main.css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
   </head>
   <body>
     <header>
-      <h1>Map Prototype</h1>
+      <h1>Map Prototype | Projections</h1>
     </header>
     <main>
+      <section id="options">
+        <button class="projection-option" id="mercator" type="button" name="albers" onclick="controller.changeProjection('mercator')">
+          Mercator
+        </button>
+        <button class="projection-option" id="lambertConformalConic" type="button" name="albers" onclick="controller.changeProjection('lambertConformalConic')">
+          Lambert Conformal Conic
+        </button>
+        <button class="projection-option" id="albers" type="button" name="albers" onclick="controller.changeProjection('albers')">
+          Albers
+        </button>
+        <button class="projection-option" id="equalEarth" type="button" name="albers" onclick="controller.changeProjection('equalEarth')">
+          Equal Earth
+        </button>
+        <button class="projection-option" id="naturalEarth" type="button" name="albers" onclick="controller.changeProjection('naturalEarth')">
+          Natural Earth
+        </button>
+        <button class="projection-option" id="winkelTripel" type="button" name="albers" onclick="controller.changeProjection('winkelTripel')">
+          Winkel Tripel
+        </button>
+        <button class="projection-option" id="equirectangular" type="button" name="albers" onclick="controller.changeProjection('equirectangular')">
+          Equirectangular
+        </button>
+      </section>
       <section id="map"></section>
     </main>
     <footer>

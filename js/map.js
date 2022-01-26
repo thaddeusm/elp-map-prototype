@@ -8,6 +8,15 @@ var interactiveMap = {
     offset: 80,
     maxWidth: '180'
   },
+  projections: [
+    'mercator',
+    'albers',
+    'lambertConformalConic',
+    'equalEarth',
+    'naturalEarth',
+    'winkelTripel',
+    'equirectangular'
+  ],
   getToken: function() {
     var scope = this;
     fetch('/api/getToken.js', {
@@ -22,13 +31,14 @@ var interactiveMap = {
 			}).then(function(response) {
          response.json().then(function(token) {
            scope.token = token;
-           scope.initializeMap();
+           scope.initializeMap('mercator');
+           view.highlightProjection('mercator');
          });
       }).catch(function(error) {
         console.log(error);
       });
   },
-  initializeMap: function() {
+  initializeMap: function(projection) {
     mapboxgl.accessToken = this.token;
     /*
       Style created with MapBox Studio with filters applied to country boundaries
@@ -36,8 +46,8 @@ var interactiveMap = {
     */
     this.map = new mapboxgl.Map({
       container: 'map',
+      projection: projection,
       style: 'mapbox://styles/thaddeusmccleary/cku2oy4o30czo17s1twoies5a',
-      center: [5, 17],
       zoom: 1
     });
 
@@ -68,6 +78,10 @@ var controller = {
   resetMap: function() {
     interactiveMap.highlightedRegion = '';
     interactiveMap.addCountryFilter('', '#FFFFFF');
+  },
+  changeProjection: function(projection) {
+    interactiveMap.initializeMap(projection);
+    view.highlightProjection(projection);
   },
   adjustZoom: function() {
     var mq = window.matchMedia( "(min-width: 599px)" );
@@ -192,6 +206,19 @@ var view = {
 
     container.appendChild(ul);
     return container;
+  },
+  highlightProjection: function(projection) {
+    var target = document.getElementById(projection);
+    target.classList.add('active');
+
+    for (var i=0; i<interactiveMap.projections.length; i++) {
+      var item = interactiveMap.projections[i];
+
+      if (item !== projection) {
+        var button = document.getElementById(item);
+        button.classList.remove('active');
+      }
+    }
   }
 };
 
